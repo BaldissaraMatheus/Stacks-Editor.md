@@ -13,6 +13,7 @@ type getPosParam = boolean | (() => number);
 export class CodeBlockView implements NodeView {
     dom: HTMLElement | null;
     contentDOM?: HTMLElement | null;
+    copyBtn?: HTMLElement | null;
 
     private language: string = null;
 
@@ -57,7 +58,6 @@ export class CodeBlockView implements NodeView {
         const randomId = generateRandomId();
 
         this.dom.innerHTML = escapeHTML`
-        <div class="ps-absolute t2 r4 fs-fine pe-none us-none fc-black-350 js-language-indicator" contenteditable=false></div>
         <div class="d-flex ps-absolute t0 r0 js-processor-toggle">
             <label class="flex--item mr4" for="js-editor-toggle-${randomId}">
                 Edit
@@ -68,7 +68,13 @@ export class CodeBlockView implements NodeView {
             </div>
         </div>
         <div class="d-none js-processor-view"></div>
-        <pre class="s-code-block js-code-view js-code-mode"><code class="content-dom"></code></pre>`;
+        <pre class="tasks-code-block s-code-block js-code-view js-code-mode">
+            <code class="content-dom tasks-code-block-editor"></code>
+            <div class="tasks-code-block-header">
+                <div class="js-language-indicator" contenteditable=false></div>
+                <div><button class="copy-btn">copy</button></div>
+            </div>
+        </pre>`;
 
         this.contentDOM = this.dom.querySelector(".content-dom");
 
@@ -91,6 +97,13 @@ export class CodeBlockView implements NodeView {
                     })
                 );
             });
+
+        this.copyBtn = this.dom.querySelector(".copy-btn");
+        this.dom.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const textContent = this.dom.querySelector(".tasks-code-block-editor").textContent;
+            navigator.clipboard.writeText(textContent);
+        })
     }
 
     /** Switches the view between editor mode and processor mode */
