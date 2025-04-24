@@ -1,16 +1,3 @@
 @import "./custom-components.css";
 @import "./icons.css";
 @import "./theme.css";
-
-.tasks-code-block {
-	display: flex;
-}
-
-.tasks-code-block-header {
-	display: flex;
-	gap: 6px;
-}
-
-.tasks-code-block-editor {
-	flex: 1;
-}

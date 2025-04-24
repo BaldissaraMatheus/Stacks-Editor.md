@@ -11,7 +11,6 @@ import { Schema } from "prosemirror-model";
 import {
     liftListItem,
     sinkListItem,
-    splitListItem,
 } from "prosemirror-schema-list";
 import type { Plugin } from "prosemirror-state";
 import { caseNormalizeKeymap } from "../shared/prosemirror-plugins/case-normalize-keymap";
@@ -33,6 +32,7 @@ import {
     toggleTagLinkCommand,
     toggleList,
 } from "./commands";
+import { customSplitListItem } from "./custom-split-list-item";
 
 export function allKeymaps(
     schema: Schema,
@@ -63,7 +63,7 @@ export function allKeymaps(
         "Mod-y": redo,
         "Shift-Mod-z": redo,
         "Backspace": undoInputRule,
-        "Enter": splitListItem(schema.nodes.list_item),
+        "Enter": customSplitListItem(schema.nodes.list_item),
         "Tab": sinkListItem(schema.nodes.list_item),
         "Shift-Tab": liftListItem(schema.nodes.list_item),
         "Mod-Enter": exitBlockCommand,
