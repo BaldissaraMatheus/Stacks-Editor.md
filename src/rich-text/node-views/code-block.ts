@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Node as ProsemirrorNode } from "prosemirror-model";
 import { EditorView, NodeView } from "prosemirror-view";
 import type { IExternalPluginProvider } from "../../shared/editor-plugin";
@@ -68,11 +69,11 @@ export class CodeBlockView implements NodeView {
             </div>
         </div>
         <div class="d-none js-processor-view"></div>
-        <pre class="tasks-code-block s-code-block js-code-view js-code-mode">
-            <code class="content-dom tasks-code-block-editor"></code>
-            <div class="tasks-code-block-header">
-                <div class="js-language-indicator" contenteditable=false></div>
-                <div><button class="copy-btn">copy</button></div>
+        <pre class="d-flex s-code-block js-code-view js-code-mode">
+            <code class="content-dom fl-grow1"></code>
+            <div class="d-flex g6">
+                <div class="js-language-indicator fs-fine pe-none us-none fc-black-350" contenteditable=false></div>
+                <div><button class="js-copy-btn mn4 s-editor-btn s-btn js-editor-btn js-insert-link-btn"><span class="svg-icon-bg iconLink"></span></button></div>
             </div>
         </pre>`;
 
@@ -98,17 +99,15 @@ export class CodeBlockView implements NodeView {
                 );
             });
 
-        this.copyBtn = this.dom.querySelector(".copy-btn");
+        this.copyBtn = this.dom.querySelector(".js-copy-btn");
         this.dom.addEventListener("click", (e) => {
             e.stopPropagation();
-            const textContent = this.dom.querySelector(".tasks-code-block-editor").textContent;
-            navigator.clipboard.writeText(textContent).catch(() => {});
-                view.dispatch(
-                    view.state.tr.setNodeMarkup(getPos(), null, {
-                        cu: 'truer'
-                    })
-                );
-        })
+            const textContent =
+                this.dom.querySelector(".code-block-editor").textContent;
+            navigator.clipboard
+                .writeText(textContent)
+                .catch((e) => console.error(e));
+        });
     }
 
     /** Switches the view between editor mode and processor mode */
