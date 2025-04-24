@@ -118,9 +118,26 @@ export const richTextInputRules = (
         schema.nodes.code_block
     );
 
+    const taskListRule = wrappingInputRule(
+        /^\s*([-+*])\s(\[(x|X| )\])/,
+        schema.nodes.list_item,
+        (match) => {
+            const properties: Record<string, unknown> = { checkbox: true };
+            if (['x', 'X'].includes(match[3])) {
+                properties['checked'] = true;
+            }
+            return properties;
+        },
+    );
+
     const unorderedListRule = wrappingInputRule(
-        /^\s*[*+-]\s$/,
-        schema.nodes.bullet_list
+        /(- [^[]|(- \[[^(x|X| )])|(- \[(x|X| )[^\]]))/,
+        schema.nodes.list_item,
+        (match) => {
+            const text = match.input.substring('- '.length)
+            const properties: Record<string, unknown> = { text };
+            return properties;
+        },
     );
 
     const orderedListRule = wrappingInputRule(
@@ -169,6 +186,7 @@ export const richTextInputRules = (
             spoilerInputRule,
             headingInputRule,
             codeBlockRule,
+            taskListRule,
             unorderedListRule,
             orderedListRule,
             inlineCodeRule,

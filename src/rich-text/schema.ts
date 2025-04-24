@@ -115,10 +115,34 @@ const nodes: {
         },
     },
 
+
+    bullet_list: {
+        content: "list_item+",
+        group: "block",
+        attrs: { tight: { default: true } },
+        parseDOM: [
+            {
+                tag: "ul",
+                getAttrs: (dom: HTMLElement) => ({
+                    tight: dom.hasAttribute("data-tight"),
+                }),
+            },
+        ],
+        toDOM(node) {
+            return [
+                "ul",
+                {
+                    "data-tight": node.attrs.tight ? "true" : null,
+                },
+                0,
+            ];
+        },
+    },
+
     ordered_list: {
         content: "list_item+",
         group: "block",
-        attrs: { order: { default: 1 }, tight: { default: false } },
+        attrs: { order: { default: 1 }, tight: { default: true } },
         parseDOM: [
             {
                 tag: "ol",
@@ -147,34 +171,22 @@ const nodes: {
         },
     },
 
-    bullet_list: {
-        content: "list_item+",
-        group: "block",
-        attrs: { tight: { default: false } },
-        parseDOM: [
-            {
-                tag: "ul",
-                getAttrs: (dom: HTMLElement) => ({
-                    tight: dom.hasAttribute("data-tight"),
-                }),
-            },
-        ],
-        toDOM(node) {
-            return [
-                "ul",
-                { "data-tight": node.attrs.tight ? "true" : null },
-                0,
-            ];
-        },
-    },
-
     list_item: {
         content: "block+",
         defining: true,
-        parseDOM: [{ tag: "li" }],
-        toDOM() {
-            return ["li", 0];
-        },
+        attrs: { checkbox: { default: false }, checked: { default: false }, text: { default: '' } },
+        parseDOM: [
+            {
+                tag: "li",
+                getAttrs: (dom: HTMLElement) => {
+                    return {
+                        checkbox: dom.hasAttribute("checkbox"),
+                        checked: dom.hasAttribute("checked"),
+                        text: dom.hasAttribute("text"),
+                    }
+                },
+            },
+        ],
     },
 
     text: {

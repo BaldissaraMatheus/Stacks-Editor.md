@@ -102,7 +102,12 @@ export class CodeBlockView implements NodeView {
         this.dom.addEventListener("click", (e) => {
             e.stopPropagation();
             const textContent = this.dom.querySelector(".tasks-code-block-editor").textContent;
-            navigator.clipboard.writeText(textContent);
+            navigator.clipboard.writeText(textContent).catch(() => {});
+                view.dispatch(
+                    view.state.tr.setNodeMarkup(getPos(), null, {
+                        cu: 'truer'
+                    })
+                );
         })
     }
 

@@ -43,6 +43,7 @@ import { interfaceManagerPlugin } from "../shared/prosemirror-plugins/interface-
 import { IExternalPluginProvider } from "../shared/editor-plugin";
 import { createMenuEntries } from "../shared/menu/index";
 import { createMenuPlugin } from "../shared/menu/plugin";
+import { ListItemView } from "./node-views/list-item";
 
 export interface RichTextOptions extends CommonViewOptions {
     /** Array of LinkPreviewProviders to handle specific link preview urls */
@@ -153,6 +154,13 @@ export class RichTextEditor extends BaseView {
                             view,
                             getPos,
                             this.externalPluginProvider.codeblockProcessors
+                        );
+                    },
+                    list_item: (node, view, getPos) => {
+                        return new ListItemView(
+                            node,
+                            view,
+                            getPos,
                         );
                     },
                     image(

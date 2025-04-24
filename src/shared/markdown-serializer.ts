@@ -236,7 +236,6 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
         if (renderHtmlTag(state, node, TagType.unordered_list)) {
             return;
         }
-
         const markup = (node.attrs.markup as string) || "-";
         state.renderList(node, "  ", () => markup + " ");
     },
@@ -258,7 +257,13 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
         if (renderHtmlTag(state, node, TagType.list_item)) {
             return;
         }
-        state.renderContent(node);
+        if (node.attrs.checkbox) {
+            const check = node.attrs.checked ? 'x' : ' ';
+            const content = node.content.content[0].content.content[0].text;
+            state.text(`[${check}] ${content}`, false);
+        } else {
+            state.renderContent(node);
+        }
     },
     paragraph(state, node) {
         if (renderHtmlTag(state, node, TagType.paragraph)) {
@@ -331,16 +336,15 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
             text = linkMark.attrs.href as string;
         } else {
             /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-unsafe-assignment */
-            const startOfLine: boolean =
-                // @ts-expect-error
-                // eslint-disable-next-line
-                state.atBlank() || state.atBlockStart || state.closed;
             /* eslint-enable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-unsafe-assignment */
+            // eslint-disable-next-line
+            // const startOfLine: boolean = state.atBlank() || state.atBlockStart || state.closed;
 
             // escape the text using the built in escape code
-            let escapedText = state.esc(node.text, startOfLine);
+            // let escapedText = state.esc(node.text, startOfLine);
+            let escapedText = node.text
 
-            // built in escape doesn't get all the cases TODO upstream!
+            // // built in escape doesn't get all the cases TODO upstream!
             escapedText = escapedText
                 .replace(/\\_/g, "_")
                 .replace(/\b_|_\b/g, "\\_");
@@ -355,6 +359,9 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
 
 // extend the default markdown serializer's nodes and add our own
 const customMarkdownSerializerNodes: MarkdownSerializerNodes = {
+    // task_item(state, node) {
+    //     state.write(node.content.content[0].content.content[0].text);
+    // },
     html_inline(state, node) {
         state.write(node.attrs.content as string);
     },

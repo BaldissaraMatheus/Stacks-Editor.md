@@ -11,6 +11,7 @@ import { stackLanguageComments } from "./markdown-it/stack-language-comments";
 import { tagLinks } from "./markdown-it/tag-link";
 import { tight_list } from "./markdown-it/tight-list";
 import type { CommonmarkParserFeatures } from "./view";
+import { set_up_list_item } from "./markdown-it/set-up-list-item";
 
 // extend the default markdown parser's tokens and add our own
 const customMarkdownParserTokens: MarkdownParser["tokens"] = {
@@ -45,11 +46,25 @@ const customMarkdownParserTokens: MarkdownParser["tokens"] = {
     stack_language_comment: { ignore: true },
     stack_language_all_comment: { ignore: true },
 
+    list_item: {
+        block: 'list_item',
+        getAttrs: (tok: Token) => {
+            return {
+                checkbox: tok.attrGet("checkbox"),
+                checked: tok.attrGet("checked"),
+                text: tok.attrGet("text"),
+            };
+        },
+    },
+
     bullet_list: {
         block: "bullet_list",
-        getAttrs: (tok: Token) => ({
-            tight: tok.attrGet("tight") === "true",
-        }),
+        attrs: { checked: { default: "true" } },
+        getAttrs: (tok: Token) => {
+            return {
+                tight: tok.attrGet("tight") === "true",
+            }
+        },
     },
     ordered_list: {
         block: "ordered_list",
@@ -256,6 +271,7 @@ class SOMarkdownIt extends MarkdownIt {
 
     parse(src: string, env: unknown) {
         const parsed = super.parse(src, env);
+        // console.log(src, parsed)
         log("Sanitized markdown token tree", parsed);
         return parsed;
     }
@@ -274,6 +290,8 @@ export function createDefaultMarkdownItInstance(
         html: features.html, // we can allow the markdown parser to send through arbitrary HTML, but only because we're gonna whitelist it later
         linkify: true, // automatically link plain URLs
     });
+
+    defaultMarkdownItInstance.disable("html_inline");
 
     if (!features.tables) {
         defaultMarkdownItInstance.disable("table");
@@ -314,6 +332,8 @@ export function createDefaultMarkdownItInstance(
     // ensure lists are tightened up for parsing into the doc
     defaultMarkdownItInstance.use(tight_list);
 
+    defaultMarkdownItInstance.use(set_up_list_item);
+
     // ensure links are have their references properly referenced
     defaultMarkdownItInstance.use(reference_link);
 
@@ -322,7 +342,6 @@ export function createDefaultMarkdownItInstance(
 
     // TODO should always exist, so remove the check once the param is made non-optional
     externalPluginProvider?.alterMarkdownIt(defaultMarkdownItInstance);
-
     return defaultMarkdownItInstance;
 }
 
