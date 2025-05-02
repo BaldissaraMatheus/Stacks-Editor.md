@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable no-unsanitized/property */
 import { Node as ProsemirrorNode } from "prosemirror-model";
 import { EditorView, NodeView } from "prosemirror-view";
@@ -22,22 +23,22 @@ export class ListItemView implements NodeView {
         const nodePos = getPos();
         if (node.attrs.checkbox) {
             this.dom.setAttribute("class", "task-item");
-            this.dom.innerHTML = escapeHTML`<input type="checkbox" ${node.attrs.checked ? "checked" : ""}></input><div class="content-dom"></div>`;
+            this.dom.innerHTML = escapeHTML`<div class="task-item"><input type="checkbox" ${node.attrs.checked ? "checked" : ""}></input><div class="content-dom"></div></div>`;
             this.contentDOM = this.dom.querySelector(".content-dom");
 
-            const input = this.dom.firstElementChild;
+            const input = this.dom.querySelector(".task-item").firstElementChild;
             input.addEventListener("change", (e) => {
                 e.stopPropagation();
 
-                const nodeAttrs = input.getAttribute("checked")
-                    ? { checkbox: 'true' }
-                    : { checkbox: 'true', checked: "true" };
+                // @ts-ignore
+                const nodeAttrs = e.target.checked
+                    ? { checkbox: 'true', checked: "true" }
+                    : { checkbox: 'true' }
                 view.dispatch(
                     view.state.tr.setNodeMarkup(getPos(), null, nodeAttrs)
                 );
             });
             this.update(node);
-            this.contentDOM = this.dom.querySelector(".content-dom");
         } else {
             this.dom.innerHTML = escapeHTML`<div class="content-dom"></div>`;
             this.contentDOM = this.dom.querySelector(".content-dom");
@@ -48,12 +49,22 @@ export class ListItemView implements NodeView {
             nodePos + node.nodeSize - 2 <= view.state.selection.$to.pos;
         if (!node.attrs.checkbox && node.attrs.text && nodeIsSelected) {
             setTimeout(() => {
-                const transaction = view.state.tr.insertText(
+                const insertTextTransaction = view.state.tr.insertText(
                     node.attrs.text as string,
                     view.state.selection.$from.pos
                 );
-                if (transaction && view.dispatch) {
-                    view.dispatch(transaction);
+                if (insertTextTransaction && view.dispatch) {
+                    view.dispatch(insertTextTransaction);
+                }
+            }, 0);
+            setTimeout(() => {
+                const clearTextTransaction = view.state.tr.setNodeAttribute(
+                    getPos(),
+                    'text',
+                    '',
+                );
+                if (clearTextTransaction && view.dispatch) {
+                    view.dispatch(clearTextTransaction);
                 }
             }, 0);
         }

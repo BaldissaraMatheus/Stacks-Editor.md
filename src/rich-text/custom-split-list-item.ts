@@ -83,7 +83,6 @@ export function customSplitListItem(
                 : null;
         const tr = state.tr.delete($from.pos, $to.pos);
         const checkbox = grandParent.attrs.checkbox;
-        console.log({ checkbox })
         const types = nextType
             ? [
                   itemAttrs
@@ -92,7 +91,6 @@ export function customSplitListItem(
                   { type: nextType, attrs: { checked: false, checkbox } },
               ]
             : [{ type: itemType, attrs: { checked: false, checkbox } }];
-        if (!canSplit(tr.doc, $from.pos, 2, types)) return false;
         if (dispatch) dispatch(tr.split($from.pos, 2, types).scrollIntoView());
         return true;
     };
