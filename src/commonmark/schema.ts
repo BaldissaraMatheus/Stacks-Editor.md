@@ -31,25 +31,6 @@ export const commonmarkSchema = new Schema({
                 return ["pre", { class: "s-code-block markdown" }, ["code", 0]];
             },
         },
-        // task_list: {
-        //     content: "task_item*",
-        //     group: "block",
-        //     attrs: { checked: { default: "true" } },
-        //     parseDOM: [
-        //         {
-        //             tag: "ul",
-        //         },
-        //     ],
-        //     toDOM() {
-        //         return [
-        //             "ul",
-        //             // {
-        //             //     "checked": node.attrs.checked ? "true" : "false",
-        //             // },
-        //             0,
-        //         ];
-        //     },
-        // },
         list_item: {
             content: "block*",
             // content: "text*",
@@ -61,7 +42,7 @@ export const commonmarkSchema = new Schema({
                         return { 
                             checkbox: dom.getAttribute("checkbox"),
                             checked: dom.getAttribute("checked"),
-                            text: dom.getAttribute("checked"),
+                            text: dom.getAttribute("text"),
                         };
                     },
                     contentElement: 'li'
@@ -81,45 +62,7 @@ export const commonmarkSchema = new Schema({
                     ["div", 0],
                 ];
             },
-            // toDOM() {
-            //     return ['task_item', 0]
-            // },
-            // parseDOM: [{ tag: 'task_item' }]
         },
-        // task_item: {
-        //     content: "block*",
-        //     // content: "text*",
-        //     attrs: { checked: { default: "true" } },
-        //     parseDOM: [
-        //         {
-        //             tag: "li",
-        //             getAttrs: (dom) => {
-        //                 console.log("task_item here");
-        //                 return { checked: dom.getAttribute("checked") };
-        //             },
-        //             contentElement: 'li'
-        //         },
-        //     ],
-        //     toDOM() {
-        //         // const { checked } = node.attrs;
-        //         const checked = true;
-        //         const attrs = { type: "checkbox" };
-        //         if (checked) {
-        //             // @ts-ignore
-        //             attrs.checked = "true";
-        //         }
-        //         return [
-        //             "li",
-        //             { class: "task-item" },
-        //             ["input", { type: "checkbox" }],
-        //             ["div", 0],
-        //         ];
-        //     },
-        //     // toDOM() {
-        //     //     return ['task_item', 0]
-        //     // },
-        //     // parseDOM: [{ tag: 'task_item' }]
-        // },
     },
     marks: {},
 });

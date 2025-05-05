@@ -8,6 +8,9 @@ function setUpListItem(tokens: Token[]) {
         if (token.type === 'bullet_list_open') {
             bulletListOpen = true;
         }
+        if (token.type === 'inline' && tokens[i - 2].type === 'list_item_open' && i === 3) {
+            bulletListOpen = true;
+        }
         if (token.type === 'bullet_list_close') {
             bulletListOpen = false;
         }

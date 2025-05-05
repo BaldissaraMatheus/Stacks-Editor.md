@@ -173,7 +173,6 @@ const nodes: {
 
     list_item: {
         content: "block+",
-        defining: true,
         attrs: { checkbox: { default: false }, checked: { default: false }, text: { default: '' } },
         parseDOM: [
             {

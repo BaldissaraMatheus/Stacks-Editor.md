@@ -259,7 +259,7 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
         }
         if (node.attrs.checkbox) {
             const check = node.attrs.checked ? 'x' : ' ';
-            const content = node.content.content[0].content.content[0].text;
+            const content = node.content.content[0].content.content?.[0]?.text || '';
             state.text(`[${check}] ${content}`, false);
         } else {
             state.renderContent(node);
@@ -359,9 +359,6 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
 
 // extend the default markdown serializer's nodes and add our own
 const customMarkdownSerializerNodes: MarkdownSerializerNodes = {
-    // task_item(state, node) {
-    //     state.write(node.content.content[0].content.content[0].text);
-    // },
     html_inline(state, node) {
         state.write(node.attrs.content as string);
     },
