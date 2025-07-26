@@ -115,6 +115,17 @@ const nodes: {
         },
     },
 
+    // TODO should this be a mark instead?
+    tag_link: {
+        content: "text*",
+        inline: true,
+        group: "inline",
+        attrs: {
+            tagName: { default: null },
+            tagType: { default: "tag" },
+        },
+    },
+
 
     bullet_list: {
         content: "list_item+",
@@ -433,19 +444,6 @@ const nodes: {
         ],
         toDOM(node) {
             return ["th", node.attrs, 0];
-        },
-    },
-
-    // TODO should this be a mark instead?
-    tagLink: {
-        content: "text*",
-        marks: "", // TODO should it accept marks?
-        atom: true, // TODO allow this to be editable
-        inline: true,
-        group: "inline",
-        attrs: {
-            tagName: { default: null },
-            tagType: { default: "tag" },
         },
     },
 };

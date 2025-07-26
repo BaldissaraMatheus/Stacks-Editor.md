@@ -206,6 +206,11 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
 
         state.closeBlock(node);
     },
+    tag_link(state, node) {
+        const tag = node.attrs.tagName as string;
+        state.write(`[tag:${tag}]`);
+        state.closeBlock(node);
+    },
     heading(state, node) {
         const markup = (node.attrs.markup as string) || "";
 
@@ -469,13 +474,6 @@ const customMarkdownSerializerNodes: MarkdownSerializerNodes = {
         });
 
         state.closeBlock(node);
-    },
-
-    tagLink(state, node) {
-        const isMeta = node.attrs.tagType === "meta-tag";
-        const prefix = isMeta ? "meta-tag" : "tag";
-        const tag = node.attrs.tagName as string;
-        state.write(`[${prefix}:${tag}]`);
     },
 
     spoiler(state, node) {

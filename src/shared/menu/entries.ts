@@ -165,14 +165,14 @@ const moreFormattingDropdown = (schema: Schema, options: CommonViewOptions) =>
         () => true,
         () => false,
         makeDropdownItem(
-            _t("commands.tagLink", { shortcut: getShortcut("Mod-[") }),
+            _t("commands.tag_link", { shortcut: getShortcut("Mod-[") }),
             {
                 richText: {
                     command: toggleTagLinkCommand(
                         options.parserFeatures?.tagLinks,
                         false
                     ),
-                    active: nodeTypeActive(schema.nodes.tagLink),
+                    active: nodeTypeActive(schema.nodes.tag_link),
                 },
                 commonmark: insertTagLinkCommand(
                     options.parserFeatures?.tagLinks,
@@ -180,26 +180,6 @@ const moreFormattingDropdown = (schema: Schema, options: CommonViewOptions) =>
                 ),
             },
             "tag-btn"
-        ),
-        addIf(
-            makeDropdownItem(
-                _t("commands.metaTagLink", { shortcut: getShortcut("Mod-]") }),
-                {
-                    richText: {
-                        command: toggleTagLinkCommand(
-                            options.parserFeatures?.tagLinks,
-                            true
-                        ),
-                        active: nodeTypeActive(schema.nodes.tagLink),
-                    },
-                    commonmark: insertTagLinkCommand(
-                        options.parserFeatures?.tagLinks,
-                        true
-                    ),
-                },
-                "meta-tag-btn"
-            ),
-            !options.parserFeatures?.tagLinks?.disableMetaTags
         ),
         makeDropdownItem(
             _t("commands.spoiler", { shortcut: getShortcut("Mod-/") }),

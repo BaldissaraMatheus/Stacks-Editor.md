@@ -31,6 +31,25 @@ export const commonmarkSchema = new Schema({
                 return ["pre", { class: "s-code-block markdown" }, ["code", 0]];
             },
         },
+        tag_link: {
+            content: "text*",
+            group: "block",
+            marks: "",
+            defining: true,
+            isolating: true,
+            // don't let the user select / delete
+            selectable: false,
+            attrs: { tagName: { default: "" } },
+            parseDOM: [
+                {
+                    tag: "p",
+                    preserveWhitespace: "full",
+                },
+            ],
+            toDOM() {
+                return ["p", { class: "s-tag" }, [0]];
+            },
+        },
         list_item: {
             content: "block*",
             // content: "text*",

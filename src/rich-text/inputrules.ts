@@ -4,7 +4,7 @@ import {
     textblockTypeInputRule,
     wrappingInputRule,
 } from "prosemirror-inputrules";
-import { MarkType, Schema } from "prosemirror-model";
+import { MarkType, NodeType, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
 import { CommonmarkParserFeatures } from "../shared/view";
 
@@ -180,12 +180,41 @@ export const richTextInputRules = (
             }
         );
 
+    function tagInputRule(
+        regexp: RegExp,
+        tagType: NodeType,
+        getAttrs?: (p: string[]) => { [key: string]: unknown } | null | undefined
+    ) {
+    return new InputRule(
+        regexp,
+        (
+            state: EditorState,
+            match: RegExpMatchArray,
+            start: number,
+            end: number
+        ) => {
+            const attrs = getAttrs ? getAttrs(match) : {};
+            const tr = state.tr;
+            const tagLink = schema.nodes.tag_link.create(attrs)
+            tr.replaceWith(start, end, tagLink)
+            return tr;
+        }
+    )
+    }
+
+    const tagRule = tagInputRule(
+        /\[tag:(.*?)]/,
+        schema.nodes.tag_link,
+        (match) => ({ tagName: match[1] }),
+    );
+
     return inputRules({
         rules: [
             blockquoteInputRule,
             spoilerInputRule,
             headingInputRule,
             codeBlockRule,
+            tagRule,
             taskListRule,
             unorderedListRule,
             orderedListRule,

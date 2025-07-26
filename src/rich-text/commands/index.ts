@@ -299,7 +299,7 @@ export function toggleTagLinkCommand(
         }
 
         let tr = state.tr;
-        const nodeCheck = nodeTypeActive(state.schema.nodes.tagLink);
+        const nodeCheck = nodeTypeActive(state.schema.nodes.tag_link);
         if (nodeCheck(state)) {
             const selectedText = state.selection.content().content.firstChild
                 .attrs["tagName"] as string;
@@ -318,8 +318,7 @@ export function toggleTagLinkCommand(
             if (!options.validate(selectedText.trim(), isMetaTag)) {
                 return false;
             }
-
-            const newTagNode = state.schema.nodes.tagLink.create({
+            const newTagNode = state.schema.nodes.tag_link.create({
                 tagName: selectedText.trim(),
                 tagType: isMetaTag ? "meta-tag" : "tag",
             });
@@ -492,7 +491,7 @@ export function nodeTypeActive(
 
         // check all nodes in the selection for the right type
         state.doc.nodesBetween(from, to, (node) => {
-            isNodeType = node.type.name === nodeType.name;
+            isNodeType = node.type.name === nodeType?.name;
             for (const attr in attrs) {
                 passesAttrsCheck = node.attrs[attr] === attrs[attr];
             }

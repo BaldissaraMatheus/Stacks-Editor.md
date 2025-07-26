@@ -82,6 +82,16 @@ const customMarkdownParserTokens: MarkdownParser["tokens"] = {
             markup: tok.markup || "indented",
         }),
     },
+    tag_link: {
+        block: "tag_link",
+        attrs: { tagName: { default: "" } },
+        getAttrs: (tok: Token) => {
+            return {
+                tagName: tok.attrGet("tagName"),
+                tagType: tok.attrGet("tagType"),
+            }
+        },
+    },
     fence: {
         block: "code_block",
         getAttrs: (tok: Token) => ({
@@ -147,14 +157,6 @@ const customMarkdownParserTokens: MarkdownParser["tokens"] = {
 
             return attrs;
         },
-    },
-
-    tag_link: {
-        block: "tagLink",
-        getAttrs: (tok: Token) => ({
-            tagName: tok.attrGet("tagName"),
-            tagType: tok.attrGet("tagType"),
-        }),
     },
 
     spoiler: {

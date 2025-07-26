@@ -156,6 +156,9 @@ export class RichTextEditor extends BaseView {
                             this.externalPluginProvider.codeblockProcessors
                         );
                     },
+                    tag_link(node: ProseMirrorNode) {
+                        return new TagLink(node, tagLinkOptions);
+                    },
                     list_item: (node, view, getPos) => {
                         return new ListItemView(
                             node,
@@ -169,9 +172,6 @@ export class RichTextEditor extends BaseView {
                         getPos: () => number
                     ) {
                         return new ImageView(node, view, getPos);
-                    },
-                    tagLink(node: ProseMirrorNode) {
-                        return new TagLink(node, tagLinkOptions);
                     },
                     html_block: function (node: ProseMirrorNode) {
                         return new HtmlBlock(node);
@@ -209,6 +209,7 @@ export class RichTextEditor extends BaseView {
     parseContent(content: string): ProseMirrorNode {
         let doc: ProseMirrorNode;
 
+        // acho q tá aqui
         try {
             doc = this.markdownParser.parse(content);
         } catch (e) {
@@ -238,6 +239,7 @@ export class RichTextEditor extends BaseView {
             doc = tr.doc;
         }
 
+            console.log({ doc })
         return doc;
     }
 
