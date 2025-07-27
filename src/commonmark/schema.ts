@@ -42,12 +42,12 @@ export const commonmarkSchema = new Schema({
             attrs: { tagName: { default: "" } },
             parseDOM: [
                 {
-                    tag: "p",
+                    tag: "span",
                     preserveWhitespace: "full",
                 },
             ],
             toDOM() {
-                return ["p", { class: "s-tag" }, [0]];
+                return ["span", { class: "s-tag" }, [0]];
             },
         },
         list_item: {

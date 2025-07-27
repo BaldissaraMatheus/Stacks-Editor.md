@@ -8,9 +8,7 @@ export class TagLink implements NodeView {
     dom: HTMLElement | null;
 
     constructor(node: ProsemirrorNode, options: TagLinkOptions) {
-        this.dom = document.createElement("a");
-        this.dom.setAttribute("href", "#");
-        this.dom.setAttribute("rel", "tag");
+        this.dom = document.createElement("span");
         this.dom.classList.add("s-tag");
         this.dom.innerText = node.attrs.tagName as string;
 
@@ -33,8 +31,6 @@ export class TagLink implements NodeView {
 
             const additionalClasses = rendered.additionalClasses || [];
             additionalClasses.forEach((c) => this.dom.classList.add(c));
-            this.dom.setAttribute("href", rendered.link);
-            this.dom.setAttribute("title", rendered.linkTitle);
         }
     }
 }

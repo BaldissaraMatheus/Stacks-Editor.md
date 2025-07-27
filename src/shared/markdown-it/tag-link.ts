@@ -43,11 +43,11 @@ function parse_tag_link(
     }
 
     if (!silent) {
-        let token = state.push("tag_link_open", "p", 1);
+        let token = state.push("tag_link_open", "span", 1);
         token.attrSet("tagName", tagName);
         token.attrSet("tagType", isMeta ? "meta-tag" : "tag");
         token.content = totalContent;
-        token = state.push("tag_link_close", "p", -1);
+        token = state.push("tag_link_close", "span", -1);
     }
 
     state.pos = labelEnd + 1;
