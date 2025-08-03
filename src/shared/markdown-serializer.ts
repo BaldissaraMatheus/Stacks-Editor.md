@@ -209,7 +209,6 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
     tag_link(state, node) {
         const tag = node.attrs.tagName as string;
         state.write(`[tag:${tag}]`);
-        state.closeBlock(node);
     },
     heading(state, node) {
         const markup = (node.attrs.markup as string) || "";
