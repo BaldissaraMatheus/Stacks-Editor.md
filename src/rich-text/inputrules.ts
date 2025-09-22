@@ -131,7 +131,7 @@ export const richTextInputRules = (
     );
 
     const unorderedListRule = wrappingInputRule(
-        /(- [^[]|(- \[[^(x|X| )])|(- \[(x|X| )[^\]]))/,
+        /^\s*([*+-] [^[]|(- \[[^(x|X| )])|(- \[(x|X| )[^\]]))/,
         schema.nodes.list_item,
         (match) => {
             const text = match.input.substring('- '.length)
