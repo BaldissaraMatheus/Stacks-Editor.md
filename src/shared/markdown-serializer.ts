@@ -267,7 +267,8 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
             if (/^(\[(x|X| )\])/.test(content)) {
                 content = content.substring('[ ] '.length);
             }
-            state.text(`[${check}] ${content}`, false);
+            state.text(`[${check}] `, false);
+            state.renderInline(node, false);
         } else {
             state.renderContent(node);
         }
