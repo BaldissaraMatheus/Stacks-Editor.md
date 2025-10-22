@@ -26,14 +26,15 @@ export class ListItemView implements NodeView {
             this.dom.innerHTML = escapeHTML`<div class="task-item"><input type="checkbox" ${node.attrs.checked ? "checked" : ""}></input><div class="content-dom"></div></div>`;
             this.contentDOM = this.dom.querySelector(".content-dom");
 
-            const input = this.dom.querySelector(".task-item").firstElementChild;
+            const input =
+                this.dom.querySelector(".task-item").firstElementChild;
             input.addEventListener("change", (e) => {
                 e.stopPropagation();
 
                 // @ts-ignore
                 const nodeAttrs = e.target.checked
-                    ? { checkbox: 'true', checked: "true" }
-                    : { checkbox: 'true' }
+                    ? { checkbox: "true", checked: "true" }
+                    : { checkbox: "true" };
                 view.dispatch(
                     view.state.tr.setNodeMarkup(getPos(), null, nodeAttrs)
                 );
@@ -60,8 +61,8 @@ export class ListItemView implements NodeView {
             setTimeout(() => {
                 const clearTextTransaction = view.state.tr.setNodeAttribute(
                     getPos(),
-                    'text',
-                    '',
+                    "text",
+                    ""
                 );
                 if (clearTextTransaction && view.dispatch) {
                     view.dispatch(clearTextTransaction);
@@ -70,8 +71,12 @@ export class ListItemView implements NodeView {
         }
         if (node.attrs.checkbox && node.attrs.text) {
             setTimeout(() => {
-                this.dom.querySelector(".content-dom").innerHTML = node.attrs
-                    .text as string;
+                const doubleBracketsLength = "[ ] [ ]".length;
+                const contentLength =
+                    this.dom.querySelector(".content-dom").innerHTML.length;
+                this.dom.querySelector(".content-dom").innerHTML = this.dom
+                    .querySelector(".content-dom").innerHTML
+                    .substring(doubleBracketsLength, contentLength - 1);
             }, 0);
         }
     }
