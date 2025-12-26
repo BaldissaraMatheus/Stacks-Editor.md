@@ -263,11 +263,10 @@ const defaultMarkdownSerializerNodes: MarkdownSerializerNodes = {
         }
         if (node.attrs.checkbox) {
             const check = node.attrs.checked ? 'x' : ' ';
-            let content = (node.content.content[0].content.content?.[0]?.text || '');
-            if (/^(\[(x|X| )\])/.test(content)) {
-                content = content.substring('[ ] '.length);
+            const firstNodeContent = (node.content.content[0].content.content?.[0]?.text || '');
+            if (!/^(\[(x|X| )\])/.test(firstNodeContent)) {
+                state.text(`[${check}] `, false);
             }
-            state.text(`[${check}] `, false);
             state.renderInline(node, false);
         } else {
             state.renderContent(node);
